@@ -1,0 +1,72 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "components.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/components.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "intt.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/intt.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "multiply.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/multiply.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "ntt.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/ntt.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "rescale.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/rescale.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "testbench.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/testbench.cpp"
+  },
+  {
+    "arguments": [
+      "/usr/bin/c++",
+      "-c",
+      "-I/opt/Xilinx/Vitis_HLS/2023.1/include/",
+      "top.cpp"
+    ],
+    "directory": "/home/phanium/xilinx/HLS-pcmult-rescale",
+    "file": "/home/phanium/xilinx/HLS-pcmult-rescale/top.cpp"
+  }
+]

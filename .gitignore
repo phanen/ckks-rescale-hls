@@ -1,0 +1,5 @@
+html
+latex
+Doxyfile
+*.out
+.cache
