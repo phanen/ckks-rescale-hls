@@ -62,8 +62,12 @@ UDTYPE barrett_reduce_63(UDTYPE input, UDTYPE modulus,
   // Barrett subtraction
   tmp1[0] = input - tmp1[1] * modulus;
 
-  return (UDTYPE)(tmp1[0]) -
-         (modulus & (UDTYPE)(-(UDTYPE)(tmp1[0] >= modulus)));
+  if (tmp1[0] >= modulus) {
+    tmp1[0] = tmp1[0] - modulus;
+  }
+  return tmp1[0];
+  // return (UDTYPE)(tmp1[0]) -
+  //        (modulus & (UDTYPE)(-(UDTYPE)(tmp1[0] >= modulus)));
 }
 
 UDTYPE barrett_reduce_128(UDTYPE input0, UDTYPE input1, UDTYPE modulus,

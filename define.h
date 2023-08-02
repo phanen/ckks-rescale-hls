@@ -11,8 +11,6 @@
 #define N 8192
 #define STAGENUM 13
 
-#define NN 16384
-
 #define CORENUM 4
 #define BRAMNUM 8
 #define BRAMSIZE 1024

@@ -31,9 +31,9 @@ void ntt_4core_new(UDTYPE operand[bramnum][bramsize],
 
   UDTYPE two_times_modulus = modulus << 1;
   UDTYPE one_u64 = 1;
-  uint32_t step_num = bramsize;
-  uint32_t stage_num = STAGENUM;
-  uint32_t stage1_max = stagemax;
+  uint32_t step_num = bramsize; // 1024
+  uint32_t stage_num = STAGENUM; // 13
+  uint32_t stage1_max = stagemax; // 10
 
   uint32_t MEa;
   uint32_t MEb;
@@ -46,8 +46,8 @@ ntt_stage1:
     uint32_t stepsize = step_num >> (i + 1);
 
     uint32_t temp1 = 1 << i;
+      uint32_t temp3 = (1 << temp2) - 1;
     uint32_t temp2 = stage1_max - i;
-    uint32_t temp3 = (one_u64 << temp2) - one_u64;
 
     MEa = 0;
     MEb = stepsize;
@@ -60,11 +60,6 @@ ntt_stage1:
       IDXTYPE rp_idx0 = temp1 + (j >> temp2);
       IDXTYPE rp_idx00 = temp1 + ((j + 1) >> temp2);
       IDXTYPE rp_idx0_i, rp_idx0_j, rp_idx00_i, rp_idx00_j;
-
-      //			rp_idx0_i = rp_idx0 / RPBRAMNUM;
-      //			rp_idx0_j = rp_idx0 % RPBRAMSIZE;
-      //			rp_idx00_i = rp_idx00 / RPBRAMNUM;
-      //			rp_idx00_j = rp_idx00 % RPBRAMSIZE;
 
       rp_idx0_i = rp_idx0(L_RPBRAMNUM - 1, 0);
       rp_idx0_j = rp_idx0 >> L_RPBRAMNUM;
@@ -86,10 +81,8 @@ ntt_stage1:
 
       for (int m = 0; m < corenum; m++) {
 #pragma HLS UNROLL
-
         ntt_core(w0, sw0, modulus, two_times_modulus, operanda[m], operandb[m],
                  operanda_out[m], operandb_out[m]);
-
         ntt_core(w00, sw00, modulus, two_times_modulus, operanda_[m],
                  operandb_[m], operanda_2out[m], operandb_2out[m]);
       }
@@ -103,12 +96,11 @@ ntt_stage1:
         operand[m + corenum][MEb] = operandb_2out[m];
       }
 
+      MEa += 1;
+      MEb += 1;
       if (((j + 1) & temp3) == 0) {
-        MEa += stepsize + 1;
-        MEb += stepsize + 1;
-      } else {
-        MEa += 1;
-        MEb += 1;
+        MEa += stepsize;
+        MEb += stepsize;
       }
     }
   }
@@ -125,8 +117,6 @@ ntt_stage2_0:
 
     for (int m = 0; m < corenum; m++) {
       arrayWindex[m] = (1 << i) + (m >> temp4);
-
-      // cout << "arrayWindex["<< m << "] = "<<arrayWindex[m] << endl;
     }
 
   ntt_stage2_inner_0:
@@ -168,17 +158,8 @@ ntt_stage2_0:
 
       for (uint32_t m = 0; m < corenum; m++) {
 #pragma HLS UNROLL
-
-        // cout << "w[m]" << w[m] << endl;
-        // cout << "sw[m]" << sw[m] << endl;
-
-        // cout << "in: operanda[m]" << operanda[m] << endl;
-        // cout << "in: operandb[m]" << operandb[m] << endl;
         ntt_core(w[m], sw[m], modulus, two_times_modulus, operanda[m],
                  operandb[m], operanda_[m], operandb_[m]);
-
-        // cout << "out: operanda[m]" << operanda_[m] << endl;
-        // cout << "out: operandb[m]" << operandb_[m] << endl;
       }
 
       operand[0][MEa] = operanda_[0];
@@ -257,7 +238,6 @@ ntt_stage2_1:
 
       for (uint32_t m = 0; m < corenum; m++) {
 #pragma HLS UNROLL
-
         ntt_core(w[m], sw[m], modulus, two_times_modulus, operanda[m],
                  operandb[m], operanda_[m], operandb_[m]);
       }
