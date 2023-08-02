@@ -31,9 +31,10 @@ void ntt_4core_new(UDTYPE operand[bramnum][bramsize],
 
   UDTYPE two_times_modulus = modulus << 1;
   UDTYPE one_u64 = 1;
-  uint32_t step_num = bramsize;
-  uint32_t stage_num = STAGENUM;
-  uint32_t stage1_max = stagemax;
+  UDTYPE neg_one = -1;
+  uint32_t step_num = bramsize;   // 1024
+  uint32_t stage_num = STAGENUM;  // 13
+  uint32_t stage1_max = stagemax; // 10
 
   uint32_t MEa;
   uint32_t MEb;
@@ -42,12 +43,14 @@ void ntt_4core_new(UDTYPE operand[bramnum][bramsize],
 #pragma HLS ARRAY_PARTITION variable = arrayWindex complete dim = 0
 
 ntt_stage1:
-  for (uint32_t i = 0; i < stage1_max; i++) {
-    uint32_t stepsize = step_num >> (i + 1);
+  for (uint32_t i = 0; i < 10; i++) {
+#pragma HLS UNROLL
+    uint32_t stepsize = 9 >> i;
 
     uint32_t temp1 = 1 << i;
-    uint32_t temp2 = stage1_max - i;
-    uint32_t temp3 = (one_u64 << temp2) - one_u64;
+    uint32_t temp2 = 10 - i;
+    // uint32_t temp4 = 22 + i;
+    // uint32_t temp3 = neg_one >> temp4;
 
     MEa = 0;
     MEb = stepsize;
@@ -103,12 +106,12 @@ ntt_stage1:
         operand[m + corenum][MEb] = operandb_2out[m];
       }
 
+      uint32_t temp3 = (1 << temp2) - 1;
+      MEa += 1;
+      MEb += 1;
       if (((j + 1) & temp3) == 0) {
-        MEa += stepsize + 1;
-        MEb += stepsize + 1;
-      } else {
-        MEa += 1;
-        MEb += 1;
+        MEa += stepsize;
+        MEb += stepsize;
       }
     }
   }
@@ -142,7 +145,6 @@ ntt_stage2_0:
 #pragma HLS ARRAY_PARTITION variable = sw complete dim = 1
 
       uint32_t temp_adder = temp_par * j;
-      // cout << "temp_adder = " << temp_adder << endl;
 
       for (uint32_t m = 0; m < corenum; m++) {
 #pragma HLS UNROLL
@@ -206,6 +208,7 @@ ntt_stage2_1:
     MEb = 0;
 
     for (int m = 0; m < corenum; m++) {
+#pragma HLS UNROLL
       arrayWindex[m] = (1 << i) + (m >> temp4);
     }
 
